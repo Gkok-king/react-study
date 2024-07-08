@@ -3,7 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import HomeButton from "./components/HomeButton/HomeButton";
+import HomeButton from "../components/HomeButton/HomeButton";
+import WalletButton from "../components/WalletButton/WalletButton";
+
+import { ReduxProvider } from "../store/index";
+
 export default function Home() {
   const router = useRouter();
 
@@ -11,7 +15,7 @@ export default function Home() {
     router.push("/about");
   };
   const shallowNavigation = () => {
-    router.push("/about", { scroll: true });
+    router.push("/home");
   };
 
   const HomeButtonClick = () => {
@@ -23,7 +27,7 @@ export default function Home() {
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex"></div>
 
       <div>
-        <HomeButton onClick={HomeButtonClick} label="开始🔗钱包" />
+        <WalletButton />
       </div>
 
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">

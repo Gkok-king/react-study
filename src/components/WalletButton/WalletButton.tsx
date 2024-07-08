@@ -1,20 +1,32 @@
-// src/app/components/Button.tsx
-import React from "react";
-import styles from "./HomeButton.module.less";
-import { TinyColor } from "@ctrl/tinycolor";
+import React, { useState } from "react";
 import { Button, ConfigProvider, Space } from "antd";
+import { TinyColor } from "@ctrl/tinycolor";
+import { WalletConnection, connectWallet } from "../../utils/wallet";
 
-interface ButtonProps {
-  label: string;
-  onClick: () => void;
+interface WalletButtonProps {
+  children?: React.ReactNode;
 }
+
 const colors1 = ["#6253E1", "#04BEFE"];
 const getHoverColors = (colors: string[]) =>
   colors.map((color) => new TinyColor(color).lighten(5).toString());
 const getActiveColors = (colors: string[]) =>
   colors.map((color) => new TinyColor(color).darken(5).toString());
 
-const HomeButton: React.FC<ButtonProps> = ({ label, onClick }) => {
+const WalletConnect: React.FC = () => {
+  const [wallet, setWallet] = useState<WalletConnection | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleConnectWallet = async () => {
+    try {
+      const walletConnection = await connectWallet();
+      setWallet(walletConnection);
+      setError(null);
+    } catch (err) {
+      setWallet(null);
+    }
+  };
+
   return (
     <Space>
       <ConfigProvider
@@ -33,17 +45,14 @@ const HomeButton: React.FC<ButtonProps> = ({ label, onClick }) => {
           },
         }}
       >
-        <Button
-          className={styles.button}
-          onClick={onClick}
-          type="primary"
-          size="large"
-        >
-          {label}
+        <Button type="primary" size="large" onClick={handleConnectWallet}>
+          连接🦊钱包
         </Button>
       </ConfigProvider>
+      {wallet && <p>已连接地址: {wallet.address}</p>}
+      {error && <p style={{ color: "red" }}>错误: {error}</p>}
     </Space>
   );
 };
 
-export default HomeButton;
+export default WalletConnect;
