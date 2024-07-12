@@ -18,8 +18,8 @@ export default function Home() {
     router.push("/home");
   };
 
-  const HomeButtonClick = () => {
-    console.log(11);
+  const vimButtonClick = () => {
+    router.push("/viem");
   };
 
   return (
@@ -46,13 +46,26 @@ export default function Home() {
             Find in-depth information about Next.js features and API.
           </p>
         </Link>
-
         <a
           onClick={shallowNavigation}
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
         >
           <h2 className="mb-3 text-2xl font-semibold">
             Learn{" "}
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              -&gt;
+            </span>
+          </h2>
+          <p className="m-0 max-w-[30ch] text-sm opacity-50">
+            Learn about Next.js in an interactive course with&nbsp;quizzes!
+          </p>
+        </a>
+        <a
+          onClick={vimButtonClick}
+          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+        >
+          <h2 className="mb-3 text-2xl font-semibold">
+            Viem{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
