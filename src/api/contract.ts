@@ -19,17 +19,17 @@ export const fetchNFTData = async (
   );
 
   const ownerAddress: string = await client.readContract({
-    address: contractAddress,
+    address: `0x${contractAddress}`,
     abi: [ownerOfAbi],
     functionName: "ownerOf",
-    args: [tokenId],
+    args: [BigInt(tokenId)],
   });
 
   const tokenUri: string = await client.readContract({
-    address: contractAddress,
+    address: `0x${contractAddress}`,
     abi: [tokenURIAbi],
     functionName: "tokenURI",
-    args: [tokenId],
+    args: [BigInt(tokenId)],
   });
 
   const blockNumber: bigint = await client.getBlockNumber();
