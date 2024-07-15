@@ -13,7 +13,7 @@ const useNFTData = (contractAddress: string, tokenId: number) => {
   const [owner, setOwner] = useState<string>("");
   const [tokenURI, setTokenURI] = useState<string>("");
   const [metadata, setMetadata] = useState<Metadata | null>(null);
-  const [blockNumber, setBlockNumber] = useState<bigint>(BigInt("11111"));
+  const [blockNumber, setBlockNumber] = useState<bigint>(BigInt(""));
 
   useEffect(() => {
     const fetchData = async () => {
