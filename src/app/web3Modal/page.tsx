@@ -8,13 +8,14 @@ const web3ModalPage = () => {
   return (
     <div>
       <Flex
+        className="w-screen h-screen"
         gap="middle"
-        style={boxStyle}
         justify="center"
         align="center"
         vertical
       >
         <w3m-button />
+        <button className="bg-sky-500 hover:bg-sky-700">点一下</button>
       </Flex>
     </div>
   );

@@ -20,6 +20,19 @@ createWeb3Modal({
   projectId,
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
   enableOnramp: true, // Optional - false as default
+  customWallets: [
+    {
+      id: "myCustomWallet",
+      name: "My Custom Wallet",
+      homepage: "www.mycustomwallet.com", // Optional
+      image_url: "my_custom_wallet_image", // Optional
+      mobile_link: "mobile_link", // Optional - Deeplink or universal
+      desktop_link: "desktop_link", // Optional - Deeplink
+      webapp_link: "webapp_link", // Optional
+      app_store: "app_store", // Optional
+      play_store: "play_store", // Optional
+    },
+  ],
 });
 
 export default function Web3ModalProvider({

@@ -1,8 +1,8 @@
 "use client";
-import { Card, Col, Flex, Row } from "antd";
+import { Card, Col, Flex, List, Row } from "antd";
 import React, { useState, useEffect } from "react";
 import useNFTData from "../../hooks/viemButton";
-
+import { geLogData } from "../../api/contract";
 interface NFTInfoProps {
   contractAddress: string;
   tokenId: number;
@@ -20,8 +20,12 @@ const boxStyle: React.CSSProperties = {
   height: "100vh",
 };
 
+function formatNumber(value: number) {
+  return value.toString + " wei";
+}
+
 const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
-  const { owner, tokenURI, metadata, blockNumber } = useNFTData(
+  const { owner, tokenURI, metadata, blockNumber, logArray } = useNFTData(
     contractAddress,
     tokenId
   );
@@ -65,6 +69,28 @@ const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
             vertical
           >
             <Card>这里准备写连接合约</Card>
+            <button onClick={geLogData}>点击</button>
+            <div className=" overflow-auto bg-white">
+              <List
+                itemLayout="horizontal"
+                dataSource={logArray}
+                renderItem={(item, index) => (
+                  <List.Item>
+                    <p>
+                      {item.args.from}
+                      <br />
+                      转给
+                      <br />
+                      {item.args.to}
+                      <br />
+                      {Number(item.args.value)}wei
+                      <br />
+                      交易ID： {item.transactionHash}
+                    </p>
+                  </List.Item>
+                )}
+              />
+            </div>
           </Flex>
         </Col>
       </Row>
