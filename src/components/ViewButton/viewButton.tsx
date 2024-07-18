@@ -1,8 +1,11 @@
 "use client";
-import { Card, Col, Flex, List, Row } from "antd";
+import { Button, Card, Col, Flex, List, Row } from "antd";
 import React, { useState, useEffect } from "react";
 import useNFTData from "../../hooks/viemButton";
-import { geLogData } from "../../api/contract";
+import { watchBlock, watchEvent } from "../../api/contract";
+import { log } from "console";
+import blockTypes from "@/types/blockTypes";
+import logsType from "@/types/logsTypes";
 interface NFTInfoProps {
   contractAddress: string;
   tokenId: number;
@@ -25,10 +28,27 @@ function formatNumber(value: number) {
 }
 
 const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
-  const { owner, tokenURI, metadata, blockNumber, logArray } = useNFTData(
+  const { owner, tokenURI, metadata, logArray, watchBlockNumber } = useNFTData(
     contractAddress,
     tokenId
   );
+
+  const [blockNumber, setBlockNumber] = useState<blockTypes>();
+  const [newLogData, setNewLogData] = useState<logsType[]>();
+
+  useEffect(() => {
+    const fetchBlockNumber = async () => {
+      await watchBlock((blockNumber: blockTypes) => {
+        setBlockNumber(blockNumber);
+      });
+      await watchEvent((logs: logsType[]) => {
+        setNewLogData(logs);
+      });
+    };
+
+    fetchBlockNumber();
+  }, []);
+
   return (
     <>
       <Row>
@@ -36,7 +56,7 @@ const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
           <Flex
             gap="middle"
             justify="center"
-            style={boxStyle}
+            className="min-h-80"
             align="center"
             vertical
           >
@@ -50,7 +70,7 @@ const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
               <strong>Token URI:</strong> {tokenURI}
             </p>
             <p>
-              <strong>区块高度:{blockNumber.toString()}</strong>
+              <strong>区块高度:</strong>
             </p>
             {metadata && (
               <div>
@@ -64,13 +84,12 @@ const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
           <Flex
             gap="middle"
             justify="center"
-            style={boxStyle}
+            className="min-h-80"
             align="center"
             vertical
           >
-            <Card>这里准备写连接合约</Card>
-            <button onClick={geLogData}>点击</button>
-            <div className=" overflow-auto bg-white">
+            <button onClick={watchBlock}>这里是查的USTD 最近100的交易</button>
+            <div className=" overflow-auto bg-white  max-h-40">
               <List
                 itemLayout="horizontal"
                 dataSource={logArray}
@@ -91,6 +110,59 @@ const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
                 )}
               />
             </div>
+          </Flex>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="min-h-40" span={12}>
+          <Flex
+            gap="middle"
+            justify="center"
+            className="min-h-80"
+            align="center"
+            vertical
+          >
+            <h1>监听新区块，打印区块高度和区块哈稀值</h1>
+            <Card className="bg-amber-100">
+              <h6>区块高度:{blockNumber?.number + ""}</h6>
+              <h6>hash:{blockNumber?.hash}</h6>
+            </Card>
+            <h1>实时采集并打印最新 USDT Token</h1>
+            <Card className="bg-amber-100">
+              <div className=" overflow-auto bg-white  max-h-40">
+                <List
+                  itemLayout="horizontal"
+                  dataSource={newLogData}
+                  renderItem={(item, index) => (
+                    <List.Item>
+                      <p>
+                        {item.args.from}
+                        <br />
+                        转给
+                        <br />
+                        {item.args.to}
+                        <br />
+                        {Number(item.args.value)}wei
+                        <br />
+                        交易ID： {item.transactionHash}
+                      </p>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </Card>
+          </Flex>
+        </Col>
+        <Col span={12}>
+          <Flex
+            gap="middle"
+            justify="center"
+            className="min-h-80"
+            align="center"
+            vertical
+          >
+            <h1>后续</h1>
+            <Card>12</Card>
           </Flex>
         </Col>
       </Row>

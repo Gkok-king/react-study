@@ -1,7 +1,8 @@
 // src/hooks/useNFTData.ts
 import { useState, useEffect } from "react";
-import { fetchNFTData, geLogData } from "../api/contract";
+import { fetchNFTData, geLogData, watchBlock } from "../api/contract";
 import logsType from "../types/logsTypes";
+import { watchBlockNumber } from "viem/actions";
 interface Metadata {
   name: string;
   description: string;
@@ -13,9 +14,11 @@ const useNFTData = (contractAddress: string, tokenId: number) => {
   const [owner, setOwner] = useState<string>("");
   const [tokenURI, setTokenURI] = useState<string>("");
   const [metadata, setMetadata] = useState<Metadata | null>(null);
-  const [blockNumber, setBlockNumber] = useState<bigint>(BigInt(""));
+  const [blockNumber, setBlockNumber] = useState<bigint>();
   const [logArray, setLogArray] = useState<logsType[]>();
+  const [watchBlockNumber, setWatchBlockNumber] = useState(null);
   useEffect(() => {
+    let unwatch;
     const fetchData = async () => {
       try {
         // const { ownerAddress, tokenUri, blockNumber } = await fetchNFTData(
@@ -24,10 +27,8 @@ const useNFTData = (contractAddress: string, tokenId: number) => {
         // );
         // setOwner(ownerAddress);
         // setTokenURI(tokenUri);
-        // setBlockNumber(blockNumber);
 
         const logArray: logsType[] = await geLogData();
-        console.log("21212", logArray);
         setLogArray(logArray);
       } catch (error) {
         console.error("Error fetching NFT data:", error);
@@ -36,7 +37,7 @@ const useNFTData = (contractAddress: string, tokenId: number) => {
     fetchData();
   }, [contractAddress, tokenId]);
 
-  return { owner, tokenURI, metadata, blockNumber, logArray };
+  return { owner, tokenURI, metadata, blockNumber, logArray, watchBlockNumber };
 };
 
 export default useNFTData;

@@ -7,6 +7,7 @@ import logsType from "@/types/logsTypes";
 
 const projectId = "977f9a3310104079aef20dc9a6507f6d";
 
+// 拿
 export const fetchNFTData = async (
   contractAddress: string,
   tokenId: number
@@ -48,6 +49,7 @@ export const fetchNFTData = async (
   return { ownerAddress, tokenUri, blockNumber };
 };
 
+// 拿取日志
 export const geLogData = async () => {
   const client = createPublicClient({
     chain: mainnet,
@@ -70,4 +72,38 @@ export const geLogData = async () => {
   });
 
   return log;
+};
+
+// 监听区块
+export const watchBlock = async (onBlockNumberCallback: any) => {
+  const client = createPublicClient({
+    chain: mainnet,
+    transport: http(`https://mainnet.infura.io/v3/${projectId}`),
+  });
+  const unwatch = client.watchBlocks({
+    onBlock: (block) => {
+      // console.log("区块", block);
+      onBlockNumberCallback(block);
+    },
+  });
+  return unwatch;
+};
+
+// 拿取最新日志
+export const watchEvent = async (onBlockNumberCallback: any) => {
+  const client = createPublicClient({
+    chain: mainnet,
+    transport: http(`https://mainnet.infura.io/v3/${projectId}`),
+  });
+  const unwatch = client.watchEvent({
+    address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+    event: parseAbiItem(
+      "event Transfer(address indexed from, address indexed to, uint256 value)"
+    ),
+    onLogs: (logs) => {
+      console.log("logs", logs);
+      onBlockNumberCallback(logs);
+    },
+  });
+  return unwatch;
 };
