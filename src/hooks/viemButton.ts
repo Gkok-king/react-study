@@ -16,7 +16,6 @@ const useNFTData = (contractAddress: string, tokenId: number) => {
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [blockNumber, setBlockNumber] = useState<bigint>();
   const [logArray, setLogArray] = useState<logsType[]>();
-  const [watchBlockNumber, setWatchBlockNumber] = useState(null);
   useEffect(() => {
     let unwatch;
     const fetchData = async () => {
@@ -37,7 +36,7 @@ const useNFTData = (contractAddress: string, tokenId: number) => {
     fetchData();
   }, [contractAddress, tokenId]);
 
-  return { owner, tokenURI, metadata, blockNumber, logArray, watchBlockNumber };
+  return { owner, tokenURI, metadata, blockNumber, logArray };
 };
 
 export default useNFTData;

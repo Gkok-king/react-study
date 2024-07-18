@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 import Web3ModalProvider from "@/context";
 
-import { config } from "@/config";
+import { config } from "@/config/wagmiConfig";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

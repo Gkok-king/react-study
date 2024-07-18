@@ -28,7 +28,7 @@ function formatNumber(value: number) {
 }
 
 const NFTInfo: React.FC<NFTInfoProps> = ({ contractAddress, tokenId }) => {
-  const { owner, tokenURI, metadata, logArray, watchBlockNumber } = useNFTData(
+  const { owner, tokenURI, metadata, logArray } = useNFTData(
     contractAddress,
     tokenId
   );

@@ -4,6 +4,7 @@ import { array } from "./../../node_modules/@types/prop-types/index.d";
 import { createPublicClient, http, parseAbiItem, Log } from "viem";
 import { mainnet } from "viem/chains";
 import logsType from "@/types/logsTypes";
+import { client } from "@/config/vimClientConfig";
 
 const projectId = "977f9a3310104079aef20dc9a6507f6d";
 
@@ -12,13 +13,6 @@ export const fetchNFTData = async (
   contractAddress: string,
   tokenId: number
 ) => {
-  const client = createPublicClient({
-    chain: mainnet,
-    transport: http(
-      `https://mainnet.infura.io/v3/977f9a3310104079aef20dc9a6507f6d`
-    ),
-  });
-
   const ownerOfAbi = parseAbiItem(
     "function ownerOf(uint256 tokenId) view returns (address)"
   );
@@ -51,10 +45,6 @@ export const fetchNFTData = async (
 
 // 拿取日志
 export const geLogData = async () => {
-  const client = createPublicClient({
-    chain: mainnet,
-    transport: http(`https://mainnet.infura.io/v3/${projectId}`),
-  });
   const latestBlock = await client.getBlockNumber();
   const startBlock = latestBlock - BigInt(100);
   console.log("latestBlock", latestBlock);
@@ -76,10 +66,6 @@ export const geLogData = async () => {
 
 // 监听区块
 export const watchBlock = async (onBlockNumberCallback: any) => {
-  const client = createPublicClient({
-    chain: mainnet,
-    transport: http(`https://mainnet.infura.io/v3/${projectId}`),
-  });
   const unwatch = client.watchBlocks({
     onBlock: (block) => {
       // console.log("区块", block);
@@ -91,10 +77,6 @@ export const watchBlock = async (onBlockNumberCallback: any) => {
 
 // 拿取最新日志
 export const watchEvent = async (onBlockNumberCallback: any) => {
-  const client = createPublicClient({
-    chain: mainnet,
-    transport: http(`https://mainnet.infura.io/v3/${projectId}`),
-  });
   const unwatch = client.watchEvent({
     address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
     event: parseAbiItem(
